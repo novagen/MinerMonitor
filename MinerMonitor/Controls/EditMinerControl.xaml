@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="Monitor.Controls.EditMinerControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="150" d:DesignWidth="300">
+    <Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="75"></ColumnDefinition>
+			<ColumnDefinition Width="*"></ColumnDefinition>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto"></RowDefinition>
+			<RowDefinition Height="auto"></RowDefinition>
+			<RowDefinition Height="auto"></RowDefinition>
+			<RowDefinition Height="auto"></RowDefinition>
+			<RowDefinition Height="auto"></RowDefinition>
+		</Grid.RowDefinitions>
+
+		<Label Grid.Column="0" Grid.Row="0" Content="Name" />
+		<TextBox Grid.Column="1" Grid.Row="0" Height="Auto" TextWrapping="NoWrap" Text="" Width="Auto" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" x:Name="NameInput" />
+
+		<Label Grid.Column="0" Grid.Row="1" Content="Url" />
+		<TextBox Grid.Column="1" Grid.Row="1" Height="Auto" TextWrapping="NoWrap" Text="" Width="Auto" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" x:Name="UrlInput" />
+
+		<Label Grid.Column="0" Grid.Row="2" Content="Port" />
+		<TextBox Grid.Column="1" Grid.Row="2" Height="Auto" TextWrapping="NoWrap" Text="" Width="Auto" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" x:Name="PortInput" />
+
+		<Label Grid.Column="0" Grid.Row="3" Content="Username" />
+		<TextBox Grid.Column="1" Grid.Row="3" Height="Auto" TextWrapping="NoWrap" Text="" Width="Auto" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" x:Name="UsernameInput" />
+
+		<Label Grid.Column="0" Grid.Row="4" Content="Password" />
+		<PasswordBox Grid.Column="1" Grid.Row="4" Height="Auto" Password="" Width="Auto" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" x:Name="PasswordInput" />
+	</Grid>
+</UserControl>

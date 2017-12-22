@@ -1,0 +1,31 @@
+﻿<local:LoaderControl x:Class="Monitor.Controls.MinerControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Monitor.Controls"
+             mc:Ignorable="d"
+ 			 HorizontalAlignment="Stretch"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="75"></ColumnDefinition>
+			<ColumnDefinition Width="*"></ColumnDefinition>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto"></RowDefinition>
+			<RowDefinition Height="auto"></RowDefinition>
+			<RowDefinition Height="auto"></RowDefinition>
+			<RowDefinition Height="auto"></RowDefinition>
+		</Grid.RowDefinitions>
+
+		<Label Grid.ColumnSpan="2" Grid.Row="0" Content="" FontSize="18" Padding="5,5,5,0" x:Name="MinerName" />
+		<Label Grid.ColumnSpan="2" Grid.Row="1" FontWeight="Bold" Content="Miner" />
+
+		<Separator Grid.ColumnSpan="2" Grid.Row="2"  HorizontalAlignment="Stretch" Width="Auto" />
+
+		<Label Grid.Column="0" Grid.Row="3" FontWeight="Bold" Content="Hashrate" />
+
+		<Label Grid.Column="1" Grid.Row="3" Content="0" x:Name="MinerHashrate" />
+	</Grid>
+</local:LoaderControl>
