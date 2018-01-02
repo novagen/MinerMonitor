@@ -1,6 +1,7 @@
 ﻿using Monitor.Models;
 using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -44,12 +45,20 @@ namespace Monitor.Controls
 				{
 					SetStatusMessage(result.Error.Message);
 				}
+				else
+				{
+					HideLoader();
+				}
 			}
 		}
 
 		private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
 		{
-			var xmrStak = new XmrStakApi.XmrStak(GetProxy());
+			var xmrStak = new XmrStakApi.XmrStak
+			{
+				Proxy = GetProxy()
+			};
+
 			var result = xmrStak.GetData(Miner.GetStakMiner());
 
 			e.Result = result;
@@ -67,6 +76,13 @@ namespace Monitor.Controls
 
 		public void SetMiner(Miner miner)
 		{
+			if (Miner != null && miner.Id == Miner.Id)
+			{
+				return;
+			}
+
+			ShowLoader();
+
 			Miner = miner;
 			PoolDispatcherTimer.Interval = new TimeSpan(0, 0, 0);
 		}
@@ -76,7 +92,9 @@ namespace Monitor.Controls
 			if (data != null && data.Data != null)
 			{
 				MinerName.Content = Miner.Name;
-				MinerHashrate.Content = data.Data.Hashrate.Total;
+				MinerHashrate.Content = data.Data.Hashrate.Total.First();
+
+				HideLoader();
 			}
 		}
 

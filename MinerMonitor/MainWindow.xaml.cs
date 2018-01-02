@@ -64,7 +64,6 @@ namespace Monitor
 			PoolBackgroundWorker.RunWorkerCompleted += PoolBackgroundWorker_RunWorkerCompleted;
 
 			Context = new Context();
-
 			Pools = new List<Pool>();
 			Miners = new List<Miner>();
 
@@ -283,9 +282,6 @@ namespace Monitor
 					case NodeType.Pool:
 						PoolList.ContextMenu = PoolList.Resources["PoolContext"] as ContextMenu;
 						break;
-					//case NodeType.Worker:
-					//	PoolList.ContextMenu = PoolList.Resources["WorkerContext"] as ContextMenu;
-					//	break;
 					case NodeType.Miner:
 						PoolList.ContextMenu = PoolList.Resources["MinerContext"] as ContextMenu;
 						break;
@@ -475,6 +471,7 @@ namespace Monitor
 			}
 
 			ErrorMessageTimer.Start();
+			SetLoader(false);
 		}
 
 		/// <summary>

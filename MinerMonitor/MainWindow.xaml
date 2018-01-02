@@ -6,51 +6,40 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:controls="clr-namespace:Monitor.Controls"
-		Icon="/Media/Icon.ico"
+		Icon="/Media/Icon.ico" 
+		BorderBrush="#222222" BorderThickness="0"
+		Background="Black"
 		UseLayoutRounding="True"
+		Style="{StaticResource CustomWindowStyle}" 
         Title="Miner Monitor"
-		Height="768"
-		Width="1024">
+		Height="480"
+		Width="640">
 	<Window.Resources>
-		<LinearGradientBrush StartPoint="0,0" EndPoint="0,1" x:Key="panelBackgroundBrush">
-			<LinearGradientBrush.GradientStops>
-				<GradientStop Color="#FFE3EFFF" Offset="0" />
-				<GradientStop Color="#FFAFD2FF" Offset="1" />
-			</LinearGradientBrush.GradientStops>
-		</LinearGradientBrush>
-
-		<Style x:Key="gridSplitterStyle" TargetType="{x:Type GridSplitter}">
-			<Setter Property="FrameworkElement.Height" Value="8" />
-			<Setter Property="TextElement.Foreground" Value="#FF204D89" />
-			<Setter Property="Border.BorderBrush" Value="#FF6593CF" />
-			<Setter Property="Panel.Background" Value="{StaticResource panelBackgroundBrush}" />
-			<Setter Property="Border.BorderThickness" Value="0,1,0,0" />
-			<Setter Property="UIElement.SnapsToDevicePixels" Value="True" />
-			<Setter Property="UIElement.Focusable" Value="False" />
-			<Setter Property="Control.Padding" Value="7,7,7,7" />
-			<Setter Property="FrameworkElement.Cursor" Value="SizeNS" />
-			<Setter Property="Control.Template">
-				<Setter.Value>
-					<ControlTemplate>
-						<Border BorderThickness="{TemplateBinding Border.BorderThickness}" BorderBrush="{TemplateBinding Border.BorderBrush}" Background="{TemplateBinding Panel.Background}">
-							<Border BorderThickness="1,1,0,0" BorderBrush="{StaticResource panelBackgroundBrush}">
-								<Canvas Width="19" Height="3">
-									<Rectangle Fill="{StaticResource panelBackgroundBrush}" Width="2" Height="2" Canvas.Left="1" Canvas.Top="0" />
-									<Rectangle Fill="{StaticResource panelBackgroundBrush}" Width="2" Height="2" Canvas.Left="5" Canvas.Top="0" />
-									<Rectangle Fill="{StaticResource panelBackgroundBrush}" Width="2" Height="2" Canvas.Left="9" Canvas.Top="0" />
-									<Rectangle Fill="{StaticResource panelBackgroundBrush}" Width="2" Height="2" Canvas.Left="13" Canvas.Top="0" />
-									<Rectangle Fill="{StaticResource panelBackgroundBrush}" Width="2" Height="2" Canvas.Left="17" Canvas.Top="0" />
-									<Rectangle Fill="{TemplateBinding TextElement.Foreground}" Width="2" Height="2" Canvas.Left="0" Canvas.Top="0" />
-									<Rectangle Fill="{TemplateBinding TextElement.Foreground}" Width="2" Height="2" Canvas.Left="4" Canvas.Top="0" />
-									<Rectangle Fill="{TemplateBinding TextElement.Foreground}" Width="2" Height="2" Canvas.Left="8" Canvas.Top="0" />
-									<Rectangle Fill="{TemplateBinding TextElement.Foreground}" Width="2" Height="2" Canvas.Left="12" Canvas.Top="0" />
-									<Rectangle Fill="{TemplateBinding TextElement.Foreground}" Width="2" Height="2" Canvas.Left="16" Canvas.Top="0" />
-								</Canvas>
-							</Border>
-						</Border>
-					</ControlTemplate>
-				</Setter.Value>
-			</Setter>
+		<Style TargetType="{x:Type GridSplitter}">
+			<Setter Property="BorderThickness" Value="0" />
+			<Setter Property="Background" Value="#222222"/>
+		</Style>
+		<Style TargetType="{x:Type TreeViewItem}">
+			<Setter Property="Foreground" Value="White"/>
+		</Style>
+		<Style TargetType="{x:Type Menu}">
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="Background" Value="#222222"/>
+		</Style>
+		<Style TargetType="{x:Type MenuItem}">
+			<Setter Property="Foreground" Value="Black"/>
+		</Style>
+		<Style TargetType="{x:Type ContextMenu}">
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="Background" Value="#222222"/>
+		</Style>
+		<Style TargetType="{x:Type StatusBar}">
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="Background" Value="#222222"/>
+		</Style>
+		<Style TargetType="{x:Type TreeView}">
+			<Setter Property="BorderBrush" Value="Transparent"/>
+			<Setter Property="Background" Value="Transparent"/>
 		</Style>
 	</Window.Resources>
 	<DockPanel LastChildFill="True">
@@ -58,13 +47,13 @@
 			<Label x:Name="StatusMessage" Height="Auto" Width="Auto" FontSize="10"></Label>
 		</StatusBar>
 		<DockPanel Background="Transparent" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="Auto" Height="Auto" Margin="0,0,0,0" DockPanel.Dock="Top">
-			<Menu IsMainMenu="True" DockPanel.Dock="Top">
+			<Menu IsMainMenu="True" DockPanel.Dock="Top" Height="22" Visibility="Collapsed">
 				<Menu.ItemsPanel>
 					<ItemsPanelTemplate>
 						<DockPanel HorizontalAlignment="Left" />
 					</ItemsPanelTemplate>
 				</Menu.ItemsPanel>
-				<MenuItem Header="_File">
+				<MenuItem Header="_File" Foreground="White">
 					<MenuItem Header="Add pool" Click="MenuItemAddPool_Click">
 						<MenuItem.Icon>
 							<Image Source="/Icons/page_add.png" />
@@ -89,20 +78,53 @@
 				</MenuItem>
 			</Menu>
 			<xctk:BusyIndicator
-				IsBusy="False"
+				Panel.ZIndex="10" 
+				Background="#444444"
+				BorderBrush="#333333" BorderThickness="0" Foreground="#333333"
+				IsBusy="False" 
 				Name="BusyIndicator"
 				BusyContent="Working..."
-				VerticalAlignment="Stretch"
-				HorizontalAlignment="Stretch"
+				VerticalAlignment="Stretch" 
+				DisplayAfter="0"
+				HorizontalAlignment="Stretch" 
 				Width="Auto"
 				Height="Auto">
+				<xctk:BusyIndicator.BusyContentTemplate>
+					<DataTemplate>
+						<StackPanel Margin="4">
+							<TextBlock Text="Loading.." Foreground="#CCCCCC" FontWeight="Bold" HorizontalAlignment="Center"/>
+							<Grid Margin="0,10,0,0" Visibility="Collapsed">
+								<Grid.RowDefinitions>
+									<RowDefinition Height="Auto"></RowDefinition>
+								</Grid.RowDefinitions>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition/>
+									<ColumnDefinition/>
+								</Grid.ColumnDefinitions>
+								<Button Grid.Column="0" Content="Pause" HorizontalAlignment="Right" FontSize="12" Height="Auto" Width="Auto" Padding="5,0,5,0" Margin="0 0 2 0"/>
+								<Button Grid.Column="1" Content="Cancel" HorizontalAlignment="Left" FontSize="12" Height="Auto" Width="Auto" Padding="5,0,5,0" Margin="2 0 0 0"/>
+							</Grid>
+						</StackPanel>
+					</DataTemplate>
+				</xctk:BusyIndicator.BusyContentTemplate>
+				<xctk:BusyIndicator.OverlayStyle>
+					<Style TargetType="Rectangle">
+						<Setter Property="Fill" Value="#FF000000"/>
+					</Style>
+				</xctk:BusyIndicator.OverlayStyle>
+				<xctk:BusyIndicator.ProgressBarStyle>
+					<Style TargetType="ProgressBar">
+						<Setter Property="Visibility" Value="Collapsed"/>
+					</Style>
+				</xctk:BusyIndicator.ProgressBarStyle>
 				<Grid Margin="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="Auto" Height="Auto" Name="MainGrid">
 					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="506*" />
 						<ColumnDefinition Width="5" />
-						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="505*" />
 					</Grid.ColumnDefinitions>
 					<TreeView
+						Panel.ZIndex="2"
 						Grid.Column="0"
 						Height="Auto"
 						Name="PoolList"
@@ -110,17 +132,16 @@
 						HorizontalAlignment="Stretch"
 						Width="Auto"
 						Margin="0,0,0,0"
-						BorderBrush="Transparent"
-						AllowDrop="True"
+						AllowDrop="False"
 						VirtualizingStackPanel.VirtualizationMode="Recycling"
 						SelectedItemChanged="PoolList_SelectedItemChanged"
 						ItemsSource="{Binding}"
 						PreviewMouseRightButtonDown="PoolList_PreviewMouseRightButtonDown">
 						<TreeView.Resources>
 							<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
-							<SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
+							<SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="White" />
 							<SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="Transparent" />
-							<SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="Black" />
+							<SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="White" />
 							<ContextMenu x:Key="PoolsContext" StaysOpen="true">
 								<MenuItem Header="Add pool" Click="MenuPoolsAdd_Click">
 									<MenuItem.Icon>

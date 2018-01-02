@@ -3,7 +3,6 @@ using NanopoolApi;
 using NanopoolApi.Data;
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
@@ -15,7 +14,7 @@ namespace Monitor.Controls
 	/// </summary>
 	public partial class PoolControl : LoaderControl
 	{
-		private Pool Account { get; set; }
+		private Pool Pool { get; set; }
 		private DispatcherTimer PoolDispatcherTimer { get; set; }
 		private static readonly int PoolTimerTick = 5;
 
@@ -48,13 +47,17 @@ namespace Monitor.Controls
 				{
 					SetStatusMessage(result.Error);
 				}
+				else
+				{
+					HideLoader();
+				}
 			}
 		}
 
 		private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
 		{
-			var nanopool = new Nanopool(Account.Type, GetProxy());
-			var result = nanopool.GetGeneralInfo(Account.Wallet);
+			var nanopool = new Nanopool(Pool.Type, GetProxy());
+			var result = nanopool.GetGeneralInfo(Pool.Wallet);
 			e.Result = result;
 		}
 
@@ -68,16 +71,19 @@ namespace Monitor.Controls
 			}
 		}
 
-		public void SetPool(Pool account)
+		public void SetPool(Pool pool)
 		{
-			Debug.WriteLine(account);
+			if (Pool != null && pool.Id == Pool.Id)
+			{
+				return;
+			}
 
 			ShowLoader();
 
-			Account = account;
+			Pool = pool;
 			PoolDispatcherTimer.Interval = new TimeSpan(0, 0, 0);
 
-			AccountName.Content = account.Name;
+			AccountName.Content = pool.Name;
 		}
 
 		private void UpdateValues(GeneralInfo data)
@@ -95,7 +101,7 @@ namespace Monitor.Controls
 
 		public override void LoaderControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
 		{
-			if (sender != null && Account != null)
+			if (sender != null && Pool != null)
 			{
 				if (!((bool)e.NewValue))
 				{

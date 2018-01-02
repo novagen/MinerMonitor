@@ -49,6 +49,10 @@ namespace Monitor.Controls
 				{
 					SetStatusMessage(result.Error);
 				}
+				else
+				{
+					HideLoader();
+				}
 			}
 		}
 
@@ -72,7 +76,10 @@ namespace Monitor.Controls
 
 		public void SetWorker(Pool account, Worker worker)
 		{
-			Debug.WriteLine(worker);
+			if (Account != null && Worker != null && Account.Id == account.Id && worker.Id == worker.Id)
+			{
+				return;
+			}
 
 			Account = account;
 			Worker = worker;
