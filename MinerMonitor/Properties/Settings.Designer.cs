@@ -118,5 +118,29 @@ namespace Monitor.Properties {
                 this["Currency"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ProxyEnabled {
+            get {
+                return ((bool)(this["ProxyEnabled"]));
+            }
+            set {
+                this["ProxyEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool CurrencyPanelOpen {
+            get {
+                return ((bool)(this["CurrencyPanelOpen"]));
+            }
+            set {
+                this["CurrencyPanelOpen"] = value;
+            }
+        }
     }
 }

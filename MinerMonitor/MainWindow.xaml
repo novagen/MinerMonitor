@@ -43,8 +43,9 @@
 		</Style>
 	</Window.Resources>
 	<DockPanel LastChildFill="True">
-		<StatusBar Height="Auto" Width="Auto" Margin="0" VerticalAlignment="Bottom" DockPanel.Dock="Bottom" HorizontalAlignment="Stretch">
-			<Label x:Name="StatusMessage" Height="Auto" Width="Auto" FontSize="10"></Label>
+		<StatusBar Height="22" Width="Auto" Margin="0" VerticalAlignment="Bottom" DockPanel.Dock="Bottom" HorizontalAlignment="Stretch">
+			<Image x:Name="ProxyToggle" Source="Icons/proxy.png" Height="16" Width="Auto" MouseLeftButtonDown="ProxyToggle_MouseLeftButtonDown" />
+			<Label x:Name="StatusMessage" Height="16" Width="Auto" VerticalAlignment="Center" FontSize="10" Padding="0" Margin="0"></Label>
 		</StatusBar>
 		<DockPanel Background="Transparent" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="Auto" Height="Auto" Margin="0,0,0,0" DockPanel.Dock="Top">
 			<Menu IsMainMenu="True" DockPanel.Dock="Top" Height="22" Visibility="Collapsed">
@@ -193,7 +194,7 @@
 					<Grid Grid.Column="2">
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="*" />
-							<ColumnDefinition Width="120" />
+							<ColumnDefinition Width="140" x:Name="PricesColumn" />
 						</Grid.ColumnDefinitions>
 						<DockPanel Grid.Column="0" Height="Auto" Margin="0">
 							<Label x:Name="MainView" Content="XMR Tracker" FontSize="22"  DockPanel.Dock="Top"></Label>
@@ -203,7 +204,11 @@
 							<controls:PoolControl x:Name="UserControlPool" Visibility="Collapsed" DockPanel.Dock="Top" HorizontalAlignment="Stretch" />
 							<controls:MinerControl x:Name="UserControlMiner" Visibility="Collapsed" DockPanel.Dock="Top" HorizontalAlignment="Stretch" />
 						</DockPanel>
-						<controls:PricesControl x:Name="UserControlPrices" Visibility="Visible" Grid.Column="1" />
+						<DockPanel Height="10" Width="10" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Panel.ZIndex="10" MouseLeftButtonDown="DockPanel_MouseLeftButtonDown">
+							<Polygon x:Name="CurrencyPanelClose" Points="0,0 8,5,0,10" Stroke="#333333" Fill="#333333" Panel.ZIndex="20" />
+							<Polygon x:Name="CurrencyPanelOpen" Points="8,0 0,5, 8,10" Stroke="#333333" Fill="#333333" Panel.ZIndex="20" />
+						</DockPanel>
+						<controls:PricesControl x:Name="UserControlPrices" Visibility="Visible" Grid.Column="1" Background="#222222" Padding="5" />
 					</Grid>
 				</Grid>
 			</xctk:BusyIndicator>

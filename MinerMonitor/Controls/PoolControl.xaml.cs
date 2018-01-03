@@ -49,7 +49,7 @@ namespace Monitor.Controls
 				}
 				else
 				{
-					HideLoader();
+					SetStatusMessage("Unkown error");
 				}
 			}
 		}
@@ -73,29 +73,42 @@ namespace Monitor.Controls
 
 		public void SetPool(Pool pool)
 		{
-			if (Pool != null && pool.Id == Pool.Id)
+			if (Pool != null && Pool.Id == pool.Id)
 			{
 				return;
 			}
 
-			ShowLoader();
+			if (PoolDispatcherTimer.IsEnabled)
+			{
+				PoolDispatcherTimer.Stop();
+			}
+
+			if (BackgroundWorker.IsBusy)
+			{
+				BackgroundWorker.CancelAsync();
+			}
 
 			Pool = pool;
-			PoolDispatcherTimer.Interval = new TimeSpan(0, 0, 0);
 
-			AccountName.Content = pool.Name;
+			PoolDispatcherTimer.Interval = new TimeSpan(0, 0, 0);
+			PoolDispatcherTimer.Start();
 		}
 
 		private void UpdateValues(GeneralInfo data)
 		{
 			if (data != null)
 			{
+				AccountName.Content = Pool.Name;
 				AccountHashrate.Content = data.Hashrate.ToString();
 				AccountBalance.Content = data.Balance.ToString();
 				AccountUnconfirmedBalance.Content = data.UnconfirmedBalance.ToString();
 				AccountWorkers.Content = data.Workers.Count().ToString();
 
 				HideLoader();
+			}
+			else
+			{
+				SetStatusMessage("Data failure");
 			}
 		}
 

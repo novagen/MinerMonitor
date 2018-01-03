@@ -2,6 +2,7 @@
 using NanopoolApi.Data;
 using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Threading;
@@ -95,11 +96,11 @@ namespace Monitor.Controls
 		{
 			if (prices != null)
 			{
-				PriceBtc.Content = prices.Btc.ToString();
-				PriceUsd.Content = prices.Usd.ToString();
-				PriceEur.Content = prices.Eur.ToString();
-				PriceRur.Content = prices.Rur.ToString();
-				PriceCny.Content = prices.Cny.ToString();
+				PriceBtc.Content = prices.Btc.ToString("0.00");
+				PriceUsd.Content = prices.Usd.ToString("0.00");
+				PriceEur.Content = prices.Eur.ToString("0.00");
+				PriceRur.Content = prices.Rur.ToString("0.00");
+				PriceCny.Content = prices.Cny.ToString("0.00");
 			}
 		}
 

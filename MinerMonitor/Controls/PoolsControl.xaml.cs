@@ -23,6 +23,8 @@ namespace Monitor.Controls
 				{
 				}
 			}
+
+			HideLoader();
 		}
 	}
 }

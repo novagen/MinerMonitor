@@ -84,7 +84,14 @@ namespace Monitor
 			};
 
 			PoolList.DataContext = Nodes;
-			LoadProxy();
+
+			if (Properties.Settings.Default.ProxyEnabled)
+			{
+				Proxy = LoadProxy();
+			}
+
+			CheckProxy();
+			CheckCurrencyPanel();
 		}
 
 		private void UpdateMenu()
@@ -210,9 +217,27 @@ namespace Monitor
 			}
 		}
 
-		private void LoadProxy()
+		private Proxy LoadProxy()
 		{
-			Proxy = Context.Proxies.FirstOrDefault();
+			return Context.Proxies.FirstOrDefault();
+		}
+
+		private void CheckProxy()
+		{
+			if (Proxy != null)
+			{
+				ProxyToggle.Opacity = 1;
+				ProxyToggle.ToolTip = "Proxy enabled";
+				Properties.Settings.Default.ProxyEnabled = true;
+			}
+			else
+			{
+				ProxyToggle.Opacity = 0.3;
+				ProxyToggle.ToolTip = "Proxy disabled";
+				Properties.Settings.Default.ProxyEnabled = false;
+			}
+
+			Properties.Settings.Default.Save();
 		}
 
 		private void SetProxy()
@@ -307,6 +332,28 @@ namespace Monitor
 						PoolList.ContextMenu = null;
 						break;
 				}
+			}
+		}
+
+		private void CheckCurrencyPanel()
+		{
+			var open = Properties.Settings.Default.CurrencyPanelOpen;
+
+			UserControlPrices.Visibility = open ? Visibility.Visible : Visibility.Collapsed;
+			PricesColumn.Width = open ? new GridLength(140) : new GridLength(10);
+
+			if (open)
+			{
+				CurrencyPanelClose.Visibility = Visibility.Visible;
+				CurrencyPanelOpen.Visibility = Visibility.Collapsed;
+				CurrencyPanelOpen.ToolTip = "Close currency panel";
+
+			}
+			else
+			{
+				CurrencyPanelClose.Visibility = Visibility.Collapsed;
+				CurrencyPanelOpen.Visibility = Visibility.Visible;
+				CurrencyPanelOpen.ToolTip = "Open currency panel";
 			}
 		}
 
@@ -697,6 +744,45 @@ namespace Monitor
 
 		#region Handlers
 
+		private void DockPanel_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+		{
+			if (e.ClickCount == 2)
+			{
+				var open = UserControlPrices.Visibility == Visibility.Visible;
+
+				Properties.Settings.Default.CurrencyPanelOpen = !open;
+				Properties.Settings.Default.Save();
+
+				CheckCurrencyPanel();
+			}
+		}
+
+		private void ProxyToggle_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+		{
+			if (e.ClickCount == 2)
+			{
+				if (Proxy != null)
+				{
+					Proxy = null;
+				}
+				else
+				{
+					var proxy = LoadProxy();
+
+					if (proxy != null)
+					{
+						Proxy = proxy;
+					}
+					else
+					{
+						SetProxy();
+					}
+				}
+
+				CheckProxy();
+			}
+		}
+
 		private void PoolList_PreviewMouseRightButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
 		{
 			var treeViewItem = Helpers.VisualUpwardSearch(e.OriginalSource as DependencyObject);
@@ -715,6 +801,7 @@ namespace Monitor
 			var item = (TreeNode)list.SelectedItem;
 
 			CollapseAllViews();
+			SetLoader(true);
 
 			switch (item.Type)
 			{
@@ -740,6 +827,7 @@ namespace Monitor
 					break;
 
 				default:
+					SetLoader(false);
 					break;
 			}
 		}

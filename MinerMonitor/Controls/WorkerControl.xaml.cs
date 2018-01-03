@@ -39,11 +39,20 @@ namespace Monitor.Controls
 
 		private void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
-			if (e.Result is NanopoolApi.Response.ListOfWorkers result)
+			if (e.Result != null && e.Result is NanopoolApi.Response.ListOfWorkers result)
 			{
 				if (result.Status)
 				{
-					UpdateValues(result.Data.FirstOrDefault(c => c.Uid == Worker.Uid));
+					var worker = result.Data.FirstOrDefault(c => c.Uid == Worker.Uid);
+
+					if (worker != null)
+					{
+						UpdateValues(worker);
+					}
+					else
+					{
+						SetStatusMessage("Unknown worker");
+					}
 				}
 				else if (!string.IsNullOrWhiteSpace(result.Error))
 				{
@@ -51,13 +60,23 @@ namespace Monitor.Controls
 				}
 				else
 				{
-					HideLoader();
+					SetStatusMessage("Unknown error");
 				}
+			}
+			else
+			{
+				SetStatusMessage("Result failurer");
 			}
 		}
 
 		private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
 		{
+			if (BackgroundWorker.CancellationPending)
+			{
+				e.Cancel = true;
+				return;
+			}
+
 			var nanopool = new Nanopool(Account.Type, GetProxy());
 			var result = nanopool.GetListOfWorkers(Account.Wallet);
 
@@ -76,15 +95,26 @@ namespace Monitor.Controls
 
 		public void SetWorker(Pool account, Worker worker)
 		{
-			if (Account != null && Worker != null && Account.Id == account.Id && worker.Id == worker.Id)
+			if (Account != null && Worker != null && Account.Id == account.Id && Worker.Id == worker.Id)
 			{
 				return;
+			}
+
+			if (PoolDispatcherTimer.IsEnabled)
+			{
+				PoolDispatcherTimer.Stop();
+			}
+
+			if (BackgroundWorker.IsBusy)
+			{
+				BackgroundWorker.CancelAsync();
 			}
 
 			Account = account;
 			Worker = worker;
 
 			PoolDispatcherTimer.Interval = new TimeSpan(0, 0, 0);
+			PoolDispatcherTimer.Start();
 		}
 
 		private void UpdateValues(Worker data)
@@ -95,6 +125,12 @@ namespace Monitor.Controls
 				WorkerHashrate.Content = data.Hashrate.ToString();
 				WorkerRating.Content = data.Rating.ToString();
 				WorkerLastShare.Content = data.LastShare.ToDate().ToString();
+
+				HideLoader();
+			}
+			else
+			{
+				SetStatusMessage("Data failure");
 			}
 		}
 

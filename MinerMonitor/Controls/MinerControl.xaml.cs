@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
+using XmrStakApi;
 
 namespace Monitor.Controls
 {
@@ -12,9 +13,10 @@ namespace Monitor.Controls
 	/// </summary>
 	public partial class MinerControl : LoaderControl
 	{
-		private Miner Miner { get; set; }
+		private Models.Miner Miner { get; set; }
 		private DispatcherTimer PoolDispatcherTimer { get; set; }
 		private static readonly int PoolTimerTick = 5;
+		private bool Update { get; set; }
 
 		public MinerControl()
 		{
@@ -35,33 +37,32 @@ namespace Monitor.Controls
 
 		private void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
-			if (e.Result is XmrStakApi.Miner result)
+			if (e.Result != null  && e.Result is MinerResponse result)
 			{
-				if (result.Error == null)
+				if (result.Status)
 				{
 					UpdateValues(result);
 				}
 				else if (result.Error != null)
 				{
-					SetStatusMessage(result.Error.Message);
+					SetStatusMessage(result.Error.Message ?? "Unkown error");
 				}
 				else
 				{
-					HideLoader();
+					SetStatusMessage("Unkown error");
 				}
+			}
+			else
+			{
+				SetStatusMessage("Result failure");
 			}
 		}
 
 		private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
 		{
-			var xmrStak = new XmrStakApi.XmrStak
-			{
-				Proxy = GetProxy()
-			};
-
-			var result = xmrStak.GetData(Miner.GetStakMiner());
-
-			e.Result = result;
+			Update = true;
+			var xmrStak = new XmrStak(GetProxy(), 10);
+			e.Result = xmrStak.GetData(Miner.GetStakMiner());
 		}
 
 		private void PoolDispatcherTimer_Tick(object sender, EventArgs e)
@@ -74,27 +75,41 @@ namespace Monitor.Controls
 			}
 		}
 
-		public void SetMiner(Miner miner)
+		public void SetMiner(Models.Miner miner)
 		{
-			if (Miner != null && miner.Id == Miner.Id)
+			if (Miner != null && Miner.Id == miner.Id)
 			{
 				return;
 			}
 
-			ShowLoader();
+			if (PoolDispatcherTimer.IsEnabled)
+			{
+				PoolDispatcherTimer.Stop();
+			}
+
+			if (BackgroundWorker.IsBusy)
+			{
+				BackgroundWorker.CancelAsync();
+			}
 
 			Miner = miner;
+
 			PoolDispatcherTimer.Interval = new TimeSpan(0, 0, 0);
+			PoolDispatcherTimer.Start();
 		}
 
-		private void UpdateValues(XmrStakApi.Miner data)
+		private void UpdateValues(MinerResponse response)
 		{
-			if (data != null && data.Data != null)
+			if (response.Data != null)
 			{
 				MinerName.Content = Miner.Name;
-				MinerHashrate.Content = data.Data.Hashrate.Total.First();
+				MinerHashrate.Content = response.Data.Hashrate.Total.First();
 
 				HideLoader();
+			}
+			else
+			{
+				SetStatusMessage("Data failure");
 			}
 		}
 
