@@ -20,7 +20,7 @@ namespace Monitor.StyleableWindow
 				if (window.WindowState == WindowState.Maximized)
 				{
 					window.WindowState = WindowState.Normal;
-					window.ResizeMode = ResizeMode.CanResizeWithGrip;
+					window.ResizeMode = ResizeMode.CanResize;
 				}
 				else
 				{

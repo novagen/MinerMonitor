@@ -7,7 +7,7 @@
 		xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:controls="clr-namespace:Monitor.Controls"
 		Icon="/Media/Icon.ico" 
-		BorderBrush="#222222" BorderThickness="0"
+		BorderBrush="{StaticResource WindowBackColor}" BorderThickness="0"
 		Background="Black"
 		UseLayoutRounding="True"
 		Style="{StaticResource CustomWindowStyle}" 
@@ -17,25 +17,25 @@
 	<Window.Resources>
 		<Style TargetType="{x:Type GridSplitter}">
 			<Setter Property="BorderThickness" Value="0" />
-			<Setter Property="Background" Value="#222222"/>
+			<Setter Property="Background" Value="{StaticResource WindowBackColor}"/>
 		</Style>
 		<Style TargetType="{x:Type TreeViewItem}">
 			<Setter Property="Foreground" Value="White"/>
 		</Style>
 		<Style TargetType="{x:Type Menu}">
 			<Setter Property="Foreground" Value="White"/>
-			<Setter Property="Background" Value="#222222"/>
+			<Setter Property="Background" Value="{StaticResource WindowBackColor}"/>
 		</Style>
 		<Style TargetType="{x:Type MenuItem}">
 			<Setter Property="Foreground" Value="Black"/>
 		</Style>
 		<Style TargetType="{x:Type ContextMenu}">
 			<Setter Property="Foreground" Value="White"/>
-			<Setter Property="Background" Value="#222222"/>
+			<Setter Property="Background" Value="{StaticResource WindowBackColor}"/>
 		</Style>
 		<Style TargetType="{x:Type StatusBar}">
 			<Setter Property="Foreground" Value="White"/>
-			<Setter Property="Background" Value="#222222"/>
+			<Setter Property="Background" Value="{StaticResource WindowBackColor}"/>
 		</Style>
 		<Style TargetType="{x:Type TreeView}">
 			<Setter Property="BorderBrush" Value="Transparent"/>
@@ -80,8 +80,10 @@
 			</Menu>
 			<xctk:BusyIndicator
 				Panel.ZIndex="10" 
-				Background="#444444"
-				BorderBrush="#333333" BorderThickness="0" Foreground="#333333"
+				Background="{StaticResource BusyBackColor}"
+				BorderBrush="{StaticResource WindowBackColor}"
+				BorderThickness="0"
+				Foreground="{StaticResource WindowBackColor}"
 				IsBusy="False" 
 				Name="BusyIndicator"
 				BusyContent="Working..."
@@ -93,7 +95,7 @@
 				<xctk:BusyIndicator.BusyContentTemplate>
 					<DataTemplate>
 						<StackPanel Margin="4">
-							<TextBlock Text="Loading.." Foreground="#CCCCCC" FontWeight="Bold" HorizontalAlignment="Center"/>
+							<TextBlock Text="Loading.." Foreground="{StaticResource WindowForeColor}" FontWeight="Bold" HorizontalAlignment="Center"/>
 							<Grid Margin="0,10,0,0" Visibility="Collapsed">
 								<Grid.RowDefinitions>
 									<RowDefinition Height="Auto"></RowDefinition>
@@ -110,7 +112,7 @@
 				</xctk:BusyIndicator.BusyContentTemplate>
 				<xctk:BusyIndicator.OverlayStyle>
 					<Style TargetType="Rectangle">
-						<Setter Property="Fill" Value="#FF000000"/>
+						<Setter Property="Fill" Value="{StaticResource WindowBackColor}"/>
 					</Style>
 				</xctk:BusyIndicator.OverlayStyle>
 				<xctk:BusyIndicator.ProgressBarStyle>
@@ -139,10 +141,6 @@
 						ItemsSource="{Binding}"
 						PreviewMouseRightButtonDown="PoolList_PreviewMouseRightButtonDown">
 						<TreeView.Resources>
-							<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
-							<SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="White" />
-							<SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="Transparent" />
-							<SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="White" />
 							<ContextMenu x:Key="PoolsContext" StaysOpen="true">
 								<MenuItem Header="Add pool" Click="MenuPoolsAdd_Click">
 									<MenuItem.Icon>
@@ -204,11 +202,11 @@
 							<controls:PoolControl x:Name="UserControlPool" Visibility="Collapsed" DockPanel.Dock="Top" HorizontalAlignment="Stretch" />
 							<controls:MinerControl x:Name="UserControlMiner" Visibility="Collapsed" DockPanel.Dock="Top" HorizontalAlignment="Stretch" />
 						</DockPanel>
-						<DockPanel Height="10" Width="10" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Panel.ZIndex="10" MouseLeftButtonDown="DockPanel_MouseLeftButtonDown">
-							<Polygon x:Name="CurrencyPanelClose" Points="0,0 8,5,0,10" Stroke="#333333" Fill="#333333" Panel.ZIndex="20" />
-							<Polygon x:Name="CurrencyPanelOpen" Points="8,0 0,5, 8,10" Stroke="#333333" Fill="#333333" Panel.ZIndex="20" />
+						<DockPanel Height="11" Width="9" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Panel.ZIndex="10" MouseLeftButtonDown="DockPanel_MouseLeftButtonDown" Margin="0,0,0,0">
+							<Polygon x:Name="CurrencyPanelClose" Points="0,0 8,5,0,10" Stroke="{StaticResource TriangleColor}" Fill="{StaticResource TriangleColor}" Panel.ZIndex="20" />
+							<Polygon x:Name="CurrencyPanelOpen" Points="8,0 0,5,8,10" Stroke="{StaticResource TriangleColor}" Fill="{StaticResource TriangleColor}" Panel.ZIndex="20" />
 						</DockPanel>
-						<controls:PricesControl x:Name="UserControlPrices" Visibility="Visible" Grid.Column="1" Background="#222222" Padding="5" />
+						<controls:PricesControl x:Name="UserControlPrices" Visibility="Visible" Grid.Column="1" Background="{StaticResource WindowBackColor}" Padding="5" />
 					</Grid>
 				</Grid>
 			</xctk:BusyIndicator>

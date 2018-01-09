@@ -6,7 +6,7 @@
 	<Application.Resources>
 		<ResourceDictionary>
 			<SolidColorBrush x:Key="WindowColor" Color="#000000"/>
-			<SolidColorBrush x:Key="WindowBackColor" Color="#222222"/>
+			<SolidColorBrush x:Key="WindowBackColor" Color="#2C2C2C"/>
 			<SolidColorBrush x:Key="WindowForeColor" Color="WhiteSmoke"/>
 			<SolidColorBrush x:Key="WindowForeHighlightColor" Color="WhiteSmoke"/>
 			<SolidColorBrush x:Key="WindowButtonColor" Color="#333333"/>
@@ -15,6 +15,12 @@
 			<SolidColorBrush x:Key="CloseButtonColor" Color="#AA3333"/>
 			<SolidColorBrush x:Key="CloseButtonOverColor" Color="#BB4444"/>
 			<SolidColorBrush x:Key="CloseButtonPressedColor" Color="#CC5555"/>
+			<SolidColorBrush x:Key="TriangleColor" Color="#4A4A4A"/>
+			<SolidColorBrush x:Key="BusyBackColor" Color="#444444"/>
+			<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+			<SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="White" />
+			<SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="Transparent" />
+			<SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="White" />
 
 			<sw:WindowMinimizeCommand x:Key="MinimizeCommand"></sw:WindowMinimizeCommand>
 			<sw:WindowMaximizeCommand x:Key="MaximizeCommand"></sw:WindowMaximizeCommand>
@@ -80,11 +86,30 @@
 			<Style TargetType="{x:Type Image}" x:Key="WindowIcon">
 				<Setter Property="Height" Value="21"/>
 				<Setter Property="Width" Value="21"/>
-				<Setter Property="Margin" Value="0,4,10,0"/>
+				<Setter Property="Margin" Value="0,4,5,0"/>
+			</Style>
+
+			<Style x:Key="ResizeGrip" TargetType="{x:Type ResizeGrip}">
+				<Setter Property="OverridesDefaultStyle" Value="True" />
+				<Setter Property="Foreground" Value="{StaticResource TriangleColor}"/>
+				<Setter Property="Background" Value="Transparent"/>
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate TargetType="{x:Type ResizeGrip}">
+							<Border Background="{TemplateBinding Background}"
+								SnapsToDevicePixels="True"
+								Margin="0,0,2,0"
+								Width="15"
+								Height="15">
+								<Path Data="M7.677,7.5300003 L9.677,7.5300003 9.677,9.5300002 7.677,9.5300002 z M3.786,7.5300003 L5.7859998,7.5300003 5.7859998,9.5300002 3.786,9.5300002 z M0,7.5300003 L2,7.5300003 2,9.5300002 0,9.5300002 z M3.786,3.8280003 L5.7859998,3.8280003 5.7859998,5.8280003 3.786,5.8280003 z M7.677,3.7660003 L9.677,3.7660003 9.677,5.7659999 7.677,5.7659999 z M7.677,0 L9.677,0 9.677,2 7.677,2 z" Fill="{TemplateBinding Foreground}" Height="9.53" Stretch="Fill" VerticalAlignment="Top" Width="9.677"/>
+							</Border>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
 			</Style>
 
 			<ControlTemplate x:Key="WindowTemplate" TargetType="{x:Type Window}">
-				<Grid Background="{StaticResource WindowBackColor}">
+				<Grid Background="{StaticResource WindowBackColor}" ClipToBounds="False">
 					<Grid>
 						<Grid.RowDefinitions>
 							<RowDefinition Height="29"/>
@@ -98,38 +123,47 @@
 							</Grid.ColumnDefinitions>
 							<!--Source="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}},Path=Icon}"-->
 							<!---Source="/Media/Icon.ico"-->
-							<Label Grid.Column="0"                                            
-                                    sw:ControlDoubleClickBehavior.ExecuteCommand="{StaticResource CloseCommand}"                                                
-                                    sw:ControlDoubleClickBehavior.ExecuteCommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" Padding="0">
-								<Image DockPanel.Dock="Left" Style="{StaticResource WindowIcon}" Source="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}},Path=Icon}"
-                                    sw:ShowSystemMenuBehavior.TargetWindow="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"                                            
-                                    sw:ShowSystemMenuBehavior.LeftButtonShowAt="{Binding ElementName=WindowContent}"/>
+							<Image
+								Style="{StaticResource WindowIcon}"
+								Grid.Row="0"
+								Grid.Column="0"
+								ClipToBounds="False"
+								Source="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}},Path=Icon}"
+                                sw:ControlDoubleClickBehavior.ExecuteCommand="{StaticResource CloseCommand}"
+                                sw:ControlDoubleClickBehavior.ExecuteCommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
+								sw:ShowSystemMenuBehavior.TargetWindow="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
+                                sw:ShowSystemMenuBehavior.LeftButtonShowAt="{Binding ElementName=WindowContent}"/>
+							<!--Content="{TemplateBinding Property=Title}"-->
+							<Label
+								Grid.Row="0"
+								Grid.Column="1"
+								DockPanel.Dock="Left"
+								Content="{TemplateBinding Property=Title}"
+								Padding="3,0,0,0"
+                                HorizontalContentAlignment="Left"
+                                VerticalContentAlignment="Center"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                Foreground="{StaticResource WindowForeColor}"
+                                FontSize="16"
+                                sw:WindowDragBehavior.LeftMouseButtonDrag="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" 
+                                sw:ControlDoubleClickBehavior.ExecuteCommand="{StaticResource MaximizeCommand}" 
+                                sw:ControlDoubleClickBehavior.ExecuteCommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" 
+                                sw:ShowSystemMenuBehavior.TargetWindow="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" 
+                                sw:ShowSystemMenuBehavior.RightButtonShow="true">
 							</Label>
-							<Label Grid.Column="1" DockPanel.Dock="Left" Content="{TemplateBinding Property=Title}" Padding="3,0,0,0"                                                                                   
-                                    HorizontalContentAlignment="Left" 
-                                    VerticalContentAlignment="Center" 
-                                    HorizontalAlignment="Stretch" 
-                                    VerticalAlignment="Stretch" 
-                                    Foreground="{StaticResource WindowForeColor}"                                            
-                                    FontSize="16" 
-                                    sw:WindowDragBehavior.LeftMouseButtonDrag="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" 
-                                    sw:ControlDoubleClickBehavior.ExecuteCommand="{StaticResource MaximizeCommand}" 
-                                    sw:ControlDoubleClickBehavior.ExecuteCommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" 
-                                    sw:ShowSystemMenuBehavior.TargetWindow="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" 
-                                    sw:ShowSystemMenuBehavior.RightButtonShow="true">
-							</Label>
-							<StackPanel Grid.Column="2" Orientation="Horizontal" Margin="2,2,2,2">
+							<StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal" Margin="2,2,2,2">
 								<Button DockPanel.Dock="Right" Style="{StaticResource WindowButton}" Command="{StaticResource MinimizeCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">_</Button>
 								<Button DockPanel.Dock="Right" Style="{StaticResource WindowButton}" Command="{StaticResource MaximizeCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">+</Button>
 								<Button DockPanel.Dock="Right" Style="{StaticResource CloseButton}" Command="{StaticResource CloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">X</Button>
 							</StackPanel>
 						</Grid>
-						<Border Grid.Row="1" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+						<Border Grid.Row="1" Grid.ColumnSpan="3" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
 							<Grid>
 								<AdornerDecorator>
 									<ContentPresenter x:Name="WindowContent"/>
 								</AdornerDecorator>
-								<ResizeGrip  x:Name="WindowResizeGrip" HorizontalAlignment="Right" IsTabStop="false" Visibility="Collapsed" VerticalAlignment="Bottom"/>
+								<ResizeGrip x:Name="WindowResizeGrip" HorizontalAlignment="Right" IsTabStop="False" Visibility="Collapsed" VerticalAlignment="Bottom" Style="{StaticResource ResizeGrip}" />
 							</Grid>
 						</Border>
 					</Grid>
@@ -145,7 +179,7 @@
 				<ControlTemplate.Triggers>
 					<MultiTrigger>
 						<MultiTrigger.Conditions>
-							<Condition Property="ResizeMode" Value="CanResizeWithGrip"/>
+							<Condition Property="ResizeMode" Value="CanResize"/>
 							<Condition Property="WindowState" Value="Normal"/>
 						</MultiTrigger.Conditions>
 						<Setter Property="Visibility" TargetName="WindowResizeGrip" Value="Visible"/>
