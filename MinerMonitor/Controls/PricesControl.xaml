@@ -29,10 +29,10 @@
 		<Label Grid.Column="0" Grid.Row="4" Content="RUR" />
 		<Label Grid.Column="0" Grid.Row="5" Content="CNY" />
 
-		<Label Grid.Column="1" Grid.Row="1" Content="" x:Name="PriceBtc" />
-		<Label Grid.Column="1" Grid.Row="2" Content="" x:Name="PriceUsd" />
-		<Label Grid.Column="1" Grid.Row="3" Content="" x:Name="PriceEur" />
-		<Label Grid.Column="1" Grid.Row="4" Content="" x:Name="PriceRur" />
-		<Label Grid.Column="1" Grid.Row="5" Content="" x:Name="PriceCny" />
+		<Label Grid.Column="1" Grid.Row="1" Content="{Binding Btc, StringFormat=P2}" x:Name="PriceBtc" />
+		<Label Grid.Column="1" Grid.Row="2" Content="{Binding Usd, StringFormat=P2}" x:Name="PriceUsd" />
+		<Label Grid.Column="1" Grid.Row="3" Content="{Binding Eur, StringFormat=P2}" x:Name="PriceEur" />
+		<Label Grid.Column="1" Grid.Row="4" Content="{Binding Rur, StringFormat=P2}" x:Name="PriceRur" />
+		<Label Grid.Column="1" Grid.Row="5" Content="{Binding Cny, StringFormat=P2}" x:Name="PriceCny" />
 	</Grid>
 </local:LoaderControl>

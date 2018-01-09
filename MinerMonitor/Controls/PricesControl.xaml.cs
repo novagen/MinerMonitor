@@ -18,6 +18,7 @@ namespace Monitor.Controls
 		private DispatcherTimer PoolDispatcherTimer { get; set; }
 		private static readonly int PoolTimerTick = 5;
 		private PoolType? PoolType { get; set; }
+		private Prices Prices { get; set; }
 
 		public PricesControl()
 		{
@@ -36,6 +37,14 @@ namespace Monitor.Controls
 			PoolDispatcherTimer = new DispatcherTimer();
 			PoolDispatcherTimer.Tick += PoolDispatcherTimer_Tick; ;
 			PoolDispatcherTimer.Interval = new TimeSpan(0, 0, 0);
+
+			Prices = new Prices { Btc = 0, Cny = 0, Eur = 0, Rur = 0, Usd = 0 };
+
+			PriceBtc.DataContext = Prices;
+			PriceUsd.DataContext = Prices;
+			PriceEur.DataContext = Prices;
+			PriceRur.DataContext = Prices;
+			PriceCny.DataContext = Prices;
 
 			if (Properties.Settings.Default.Currency > 0)
 			{
@@ -96,11 +105,11 @@ namespace Monitor.Controls
 		{
 			if (prices != null)
 			{
-				PriceBtc.Content = prices.Btc.ToString("0.00");
-				PriceUsd.Content = prices.Usd.ToString("0.00");
-				PriceEur.Content = prices.Eur.ToString("0.00");
-				PriceRur.Content = prices.Rur.ToString("0.00");
-				PriceCny.Content = prices.Cny.ToString("0.00");
+				Prices.Btc = prices.Btc; //.ToString("0.00");
+				Prices.Usd = prices.Usd; //.ToString("0.00");
+				Prices.Eur = prices.Eur; //.ToString("0.00");
+				Prices.Rur = prices.Rur; //.ToString("0.00");
+				Prices.Cny = prices.Cny; //.ToString("0.00");
 			}
 		}
 

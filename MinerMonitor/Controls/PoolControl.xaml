@@ -9,7 +9,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="75"></ColumnDefinition>
+			<ColumnDefinition Width="150"></ColumnDefinition>
 			<ColumnDefinition Width="*"></ColumnDefinition>
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
@@ -28,13 +28,13 @@
 		<Separator Grid.ColumnSpan="2" Grid.Row="2"  HorizontalAlignment="Stretch" Width="Auto" />
 
 		<Label Grid.Column="0" Grid.Row="3" FontWeight="Bold" Content="Hashrate" />
-		<Label Grid.Column="0" Grid.Row="4" FontWeight="Bold" Content="Rating" />
-		<Label Grid.Column="0" Grid.Row="5" FontWeight="Bold" Content="Last share" />
+		<Label Grid.Column="0" Grid.Row="4" FontWeight="Bold" Content="Balance" />
+		<Label Grid.Column="0" Grid.Row="5" FontWeight="Bold" Content="Unconfirmed balance" />
 		<Label Grid.Column="0" Grid.Row="6" FontWeight="Bold" Content="Workers" />
 
-		<Label Grid.Column="1" Grid.Row="3" Content="0" x:Name="AccountHashrate" />
-		<Label Grid.Column="1" Grid.Row="4" Content="0" x:Name="AccountBalance" />
-		<Label Grid.Column="1" Grid.Row="5" Content="0" x:Name="AccountUnconfirmedBalance" />
-		<Label Grid.Column="1" Grid.Row="6" Content="0" x:Name="AccountWorkers" />
+		<Label Grid.Column="1" Grid.Row="3" Content="{Binding Hashrate}" x:Name="AccountHashrate" />
+		<Label Grid.Column="1" Grid.Row="4" Content="{Binding Balance}" x:Name="AccountBalance" />
+		<Label Grid.Column="1" Grid.Row="5" Content="{Binding UnconfirmedBalance}" x:Name="AccountUnconfirmedBalance" />
+		<Label Grid.Column="1" Grid.Row="6" Content="{Binding WorkerCount}" x:Name="AccountWorkers" />
 	</Grid>
 </local:LoaderControl>

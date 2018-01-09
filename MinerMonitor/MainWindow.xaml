@@ -122,9 +122,9 @@
 				</xctk:BusyIndicator.ProgressBarStyle>
 				<Grid Margin="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="Auto" Height="Auto" Name="MainGrid">
 					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="506*" />
+						<ColumnDefinition Width="165*" />
 						<ColumnDefinition Width="5" />
-						<ColumnDefinition Width="505*" />
+						<ColumnDefinition Width="470*" />
 					</Grid.ColumnDefinitions>
 					<TreeView
 						Panel.ZIndex="2"

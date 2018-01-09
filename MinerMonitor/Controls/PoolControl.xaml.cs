@@ -17,6 +17,7 @@ namespace Monitor.Controls
 		private Pool Pool { get; set; }
 		private DispatcherTimer PoolDispatcherTimer { get; set; }
 		private static readonly int PoolTimerTick = 5;
+		private GeneralInfo GeneralInfo { get; set; }
 
 		public PoolControl() : base()
 		{
@@ -26,6 +27,13 @@ namespace Monitor.Controls
 			{
 				WorkerSupportsCancellation = true
 			};
+
+			GeneralInfo = new GeneralInfo();
+
+			AccountHashrate.DataContext = GeneralInfo;
+			AccountBalance.DataContext = GeneralInfo;
+			AccountUnconfirmedBalance.DataContext = GeneralInfo;
+			AccountWorkers.DataContext = GeneralInfo;
 
 			BackgroundWorker.DoWork += BackgroundWorker_DoWork;
 			BackgroundWorker.RunWorkerCompleted += BackgroundWorker_RunWorkerCompleted;
@@ -90,6 +98,8 @@ namespace Monitor.Controls
 
 			Pool = pool;
 
+			AccountName.Content = Pool.Name;
+
 			PoolDispatcherTimer.Interval = new TimeSpan(0, 0, 0);
 			PoolDispatcherTimer.Start();
 		}
@@ -98,11 +108,10 @@ namespace Monitor.Controls
 		{
 			if (data != null)
 			{
-				AccountName.Content = Pool.Name;
-				AccountHashrate.Content = data.Hashrate.ToString();
-				AccountBalance.Content = data.Balance.ToString();
-				AccountUnconfirmedBalance.Content = data.UnconfirmedBalance.ToString();
-				AccountWorkers.Content = data.Workers.Count().ToString();
+				GeneralInfo.Hashrate = data.Hashrate;
+				GeneralInfo.Balance = data.Balance;
+				GeneralInfo.UnconfirmedBalance = data.UnconfirmedBalance;
+				GeneralInfo.Workers = data.Workers;
 
 				HideLoader();
 			}
