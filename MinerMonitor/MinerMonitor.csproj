@@ -44,7 +44,7 @@
       <HintPath>..\packages\EntityFramework.SqlServerCompact.6.2.0\lib\net45\EntityFramework.SqlServerCompact.dll</HintPath>
     </Reference>
     <Reference Include="NanopoolApi, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Apparent.Nanopool.Api.1.0.2\lib\net461\NanopoolApi.dll</HintPath>
+      <HintPath>..\packages\Apparent.Nanopool.Api.1.0.3\lib\net461\NanopoolApi.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -97,7 +97,7 @@
       <HintPath>..\packages\Extended.Wpf.Toolkit.3.2.0\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
     </Reference>
     <Reference Include="XmrStakApi, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Apparent.XmrStak.Api.1.0.3\lib\net461\XmrStakApi.dll</HintPath>
+      <HintPath>..\packages\Apparent.XmrStak.Api.1.0.4\lib\net461\XmrStakApi.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

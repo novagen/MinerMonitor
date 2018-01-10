@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
 using XmrStakApi;
+using XmrStakApi.Response;
 
 namespace Monitor.Controls
 {
